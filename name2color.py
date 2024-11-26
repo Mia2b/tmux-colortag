@@ -17,9 +17,7 @@ def error(msg):
 
 # add your favorite color code (256) here as candidates
 colors = [
-    63, 64, 65, 68, 103, 107,
-    166, 168, 172, 208, 203,
-    160, 161, 167, 137, 131
+    2,3,4,5,6
 ]
 
 parser = argparse.ArgumentParser(description='Maps tmux window tags to colors.')

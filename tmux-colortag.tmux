@@ -32,18 +32,18 @@ if [[ "$TMUX_COLORTAG_TAG_BOLD" == yes ]]; then
 fi
 focus_tab_text_attr="$tab_text_attr"
 if [[ "$TMUX_COLORTAG_TAG_FOCUS_UNDERLINE" == yes ]]; then
-    focus_tab_text_attr+=",underscore"
+    focus_tab_text_attr+=",double-underscore, bold, bright"
 fi
 
-bg0=${colortag_bg0:-colour235}
-bg1=${colortag_bg1:-colour237}
-white0=${colortag_white0:-colour255}
-white1=${colortag_white1:-colour250}
-lightgray=${colortag_lightgray:-colour248}
-darkgray=${colortag_darkgray:-colour241}
+bg0=${colortag_bg0:-color8}
+bg1=${colortag_bg1:-color0}
+white0=${colortag_white0:-color15}
+white1=${colortag_white1:-color7}
+lightgray=${colortag_lightgray:-color11}
+darkgray=${colortag_darkgray:-color12}
 
 TMUX_COLORTAG_TAG_FOCUS_TEXT_COLOR="${TMUX_COLORTAG_TAG_FOCUS_TEXT_COLOR:-$white0}"
-TMUX_COLORTAG_TAG_TEXT_COLOR="${TMUX_COLORTAG_TAG_TEXT_COLOR:-$bg1}"
+TMUX_COLORTAG_TAG_TEXT_COLOR="${TMUX_COLORTAG_TAG_TEXT_COLOR:-$white1}"
 
 if [[ "$TMUX_COLORTAG_TAG_FOCUS_HIGHLIGHT" == yes ]]; then
     tab_focus_fg="$TMUX_COLORTAG_TAG_FOCUS_HIGHLIGHT"
@@ -77,6 +77,7 @@ TAB_COLOR="#(\"$CURRENT_DIR/name2color.py\" #S #I '#W')"
 TAB_PREBEGIN="#[fg=$bg1,bg=${TAB_COLOR}]"
 TAB_NORMAL_BEGIN="#[fg=${TMUX_COLORTAG_TAG_TEXT_COLOR}$tab_text_attr]"
 TAB_END="#[fg=$TAB_COLOR,bg=$bg1,none]"
+
 TAB_FOCUS_BEGIN_BG="#[bg=$TAB_COLOR]"
 TAB_FOCUS_BEGIN_FG="#[fg=$TMUX_COLORTAG_TAG_FOCUS_TEXT_COLOR$focus_tab_text_attr]"
 TAB_PREEND_FG="#[fg=${TMUX_COLORTAG_TAG_TEXT_COLOR},none]"
@@ -100,7 +101,7 @@ if [[ "$TMUX_COLORTAG_USE_POWERLINE" == no ]]; then
         "${TAB_FOCUS_BEGIN_FG}#W${TAB_PREEND_FG} ${TAB_END} ")"
 else
     TMUX_COLORTAG_SEP_LEFT_PADDING="${TMUX_COLORTAG_SEP_LEFT_PADDING:-}"
-    TMUX_COLORTAG_SEP_RIGHT_PADDING="${TMUX_COLORTAG_SEP_RIGHT_PADDING:- }"
+    TMUX_COLORTAG_SEP_RIGHT_PADDING="${TMUX_COLORTAG_SEP_RIGHT_PADDING:-}"
     TMUX_COLORTAG_IDX_SEP="${TMUX_COLORTAG_IDX_SEP:-$TMUX_ARROW_SYMBOL_R2}"
     
     if [[ "$TMUX_COLORTAG_TAG_ONLY" != yes ]]; then
@@ -112,13 +113,13 @@ else
             "${RIGHTBAR_HOST}#h ")"
     fi
     tmux set -g window-status-format "$(printf %s \
-        "${TAB_PREBEGIN}$TMUX_ARROW_SYMBOL_R1 ${TAB_NORMAL_BEGIN}" \
-        "#I${TMUX_COLORTAG_SEP_LEFT_PADDING}${TMUX_COLORTAG_IDX_SEP}${TMUX_COLORTAG_SEP_RIGHT_PADDING}#W${TAB_END}$TMUX_ARROW_SYMBOL_R1 ")"
+        "${TAB_PREBEGIN}$TMUX_ARROW_SYMBOL_R1${TAB_NORMAL_BEGIN}" \
+        "#I${TMUX_COLORTAG_SEP_LEFT_PADDING}${TMUX_COLORTAG_IDX_SEP}${TMUX_COLORTAG_SEP_RIGHT_PADDING} #W ${TAB_END}$TMUX_ARROW_SYMBOL_R1")"
     tmux set -g window-status-current-format "$(printf %s \
-        "${TAB_FOCUS_BEGIN_BG}$TMUX_ARROW_SYMBOL_R1 ${TAB_FOCUS_BEGIN_FG}" \
-        "#[nounderscore,nooverline]#I" \
-        "${TMUX_COLORTAG_SEP_LEFT_PADDING}${TMUX_COLORTAG_IDX_SEP}${TMUX_COLORTAG_SEP_RIGHT_PADDING}" \
-        "${TAB_FOCUS_BEGIN_FG}#W${TAB_PREEND_FG}${TAB_END}$TMUX_ARROW_SYMBOL_R1 ")"
+        "#[fg=$bg1 bg=$TMUX_COLORTAG_TAG_FOCUS_TEXT_COLOR]$TMUX_ARROW_SYMBOL_R1" \
+        "#[fg=$TAB_COLOR]#I" \
+        "$TAB_FOCUS_BEGIN${TMUX_COLORTAG_SEP_LEFT_PADDING}$TMUX_ARROW_SYMBOL_R1${TMUX_COLORTAG_SEP_RIGHT_PADDING}" \
+        "${TAB_FOCUS_BEGIN_FG} #W ${TAB_PREEND_FG}${TAB_END}$TMUX_ARROW_SYMBOL_R1")"
 fi
 
 tmux bind-key "$TMUX_COLORTAG_KEY" run-shell "'$CURRENT_DIR/tmux-colortag-prompt.sh' prompt"
