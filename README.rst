@@ -1,5 +1,6 @@
-Tmux ColorTag Plugin/Theme
+Tmux ColorTag Plugin/Theme - Mia2b Fork
 --------------------------
+This fork are just some small tweaks so the colours would be based on my terminal theme, and the tab highlighting is easier to see which tab is selected.
 
 .. raw:: html
 
